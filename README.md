@@ -1,6 +1,6 @@
 # ChatBot
 
-*A lab report by John Q. Student*
+*A lab report by Brian Pfaff*
 
 ## In this Report
 
@@ -9,6 +9,8 @@ To submit your lab, fork [this repository](https://github.com/FAR-Lab/IDD-Fa18-L
 ## Make the ChatBot your own
 
 **Describe what changes you made to the baseline chatbot here. Don't forget to push your modified code to this repository.**
+
+I changed the
 
 ## Record someone trying out your ChatBot
 
