@@ -30,8 +30,8 @@ io.on('connect', function(socket) {
   var questionNum = 0; // keep count of question, used for IF condition.
   socket.on('loaded', function() { // we wait until the client has loaded and contacted us that it is ready to go.
 
-    socket.emit('answer', "Hey, hello I am \"___*-\" a simple chat bot example."); //We start with the introduction;
-    setTimeout(timedQuestion, 5000, socket, "What is your name?"); // Wait a moment and respond with a question.
+    socket.emit('answer', "Hey, hello I am no one a simple tax bot. \n Let's start with finding out about your income"); //We start with the introduction;
+    setTimeout(timedQuestion, 5000, socket, "How much do you make per year from your job?"); // Wait a moment and respond with a question.
 
   });
   socket.on('message', (data) => { // If we get a new message from the client we process it;
@@ -48,50 +48,79 @@ function bot(data, socket, questionNum) {
   var answer;
   var question;
   var waitTime;
+  var income;
 
   /// These are the main statments that make up the conversation.
   if (questionNum == 0) {
-    answer = 'Hello ' + input + ' :-)'; // output response
-    waitTime = 5000;
-    question = 'How old are you?'; // load next question
+    if (input <=91900){
+      tax = input*.25;
+      answer = 'Cool so for'+ ' '+ '$' + input + ' ' + 'you owe:'+ '\n' + '$' + tax; // output response
+      waitTime = 7500;
+      question = 'How much do you make from your short term (<1 year) investments?';
+      income = 1;
+    } else if (input <= 191650){
+      tax = ((91900)*(.25)+ (input-91900)*(0.28));
+      answer = 'Cool so for'+ ' '+ '$' + input + ' ' + 'you owe:'+ '\n' + '$' + tax; // output response
+      waitTime = 7500;
+      question = 'How much do you make from your short term (<1 year) investments?';
+      income = 2;
+    } else if (input <= 416700){
+      tax = (91900*.25+ (191650-91900)*.28 +(input-191650)*.33);
+      answer = 'Cool so for'+ ' '+ '$' + input + ' ' + 'you owe:'+ '\n' + '$' + tax; // output response
+      waitTime = 7500;
+      question = 'How much do you make from your short term (<1 year) investments?';
+      income = 3;
+    } else if (input <= 418400){
+      tax= (91900*.25+ (191650-91900)*.28 +(416700-191650)*.33+ (input-416700)*.35);
+      answer = 'Cool so for'+ ' '+ '$' + input + ' ' + 'you owe:'+ '\n' + '$' + tax; // output response
+      waitTime = 7500;
+      question = 'How much do you make from your short term (<1 year) investments?';
+      income = 4;
+    } else if (input > 418400){
+      tax = (91900*.25+ (191650-91900)*.28 +(416700-191650)*.33 + (418400-416700)*.35 + (input-418400)*.396);
+      answer = 'Cool so for'+ ' '+ '$' + input + ' ' + 'you owe:'+ '\n' + '$' + tax; // output response
+      waitTime = 7500;
+      question = 'How much do you make from your short term (<1 year) investments?';
+      income = 5;
+    } // load next question
   } else if (questionNum == 1) {
-    answer = 'Really, ' + input + ' years old? So that means you were born in: ' + (2018 - parseInt(input)); // output response
-    waitTime = 5000;
-    question = 'Where do you live?'; // load next question
+    if (income == 1){
+      tax += input*.25;
+      answer = 'On your short term investments of'+ ' '+ '$' + input + ' ' + 'you owe:'+ '\n' + '$' + input*.25 ; // output response
+      waitTime = 5000;
+      question = 'How much do you make from your long term (>1 year) investments?';
+    } else if (income == 2){
+      tax += input*.28;
+      answer = 'On your short term investments of'+ ' '+ '$' + input + ' ' + 'you owe:'+ '\n' + '$' + input*.28 ; // output response
+      waitTime = 5000;
+      question = 'How much do you make from your long term (>1 year) investments?';
+    } else if (input <= 416700){
+      tax += input*.33;
+      answer = 'On your short term investments of'+ ' '+ '$' + input + ' ' + 'you owe:'+ '\n' + '$' + input*.33 ; // output response
+      waitTime = 5000;
+      question = 'How much do you make from your long term (>1 year) investments?';
+    } else if (input <= 418400){
+      tax += input*.35;
+      answer = 'On your short term investments of'+ ' '+ '$' + input + ' ' + 'you owe:'+ '\n' + '$' + input*.35 ; // output response
+      waitTime = 5000;
+      question = 'How much do you make from your long term (>1 year) investments?';
+    } else if (input > 418400){
+      tax += input*.35;
+      answer = 'On your short term investments of'+ ' '+ '$' + input + ' ' + 'you owe:'+ '\n' + '$' + input*.35 ; // output response
+      waitTime = 5000;
+      question = 'How much do you make from your long term (>1 year) investments?';
+    } // load next question
   } else if (questionNum == 2) {
-    answer = 'Cool! I have never been to ' + input + '.';
-    waitTime = 5000;
-    question = 'Whats your favorite color?'; // load next question
+      tax += input*.15;
+      answer = 'On your long term investments of'+ ' '+ '$' + input + ' ' + 'you owe:'+ '\n' + '$' + input*.15 ; // output response
+      waitTime = 5000;
+      question = 'Ready for how much you owe?';
   } else if (questionNum == 3) {
-    answer = 'Ok, ' + input + ' it is.';
-    socket.emit('changeBG', input.toLowerCase());
-    waitTime = 5000;
-    question = 'Can you still read the font?'; // load next question
-  } else if (questionNum == 4) {
-    if (input.toLowerCase() === 'yes' || input === 1) {
-      answer = 'Perfect!';
-      waitTime = 5000;
-      question = 'Whats your favorite place?';
-    } else if (input.toLowerCase() === 'no' || input === 0) {
-      socket.emit('changeFont', 'white'); /// we really should look up the inverse of what we said befor.
-      answer = ''
-      question = 'How about now?';
-      waitTime = 0;
-      questionNum--; // Here we go back in the question number this can end up in a loop
-    } else {
-      question = 'Can you still read the font?'; // load next question
-      answer = 'I did not understand you. Could you please answer "yes" or "no"?'
-      questionNum--;
-      waitTime = 5000;
+    if (input == 'yes'){
+      answer = 'Ok, you owe $ ' + tax;
+      waitTime = 50000;
     }
-    // load next question
-  } else {
-    answer = 'I have nothing more to say!'; // output response
-    waitTime = 0;
-    question = '';
-  }
-
-
+  } // load next question
   /// We take the changed data and distribute it across the required objects.
   socket.emit('answer', answer);
   setTimeout(timedQuestion, waitTime, socket, question);
